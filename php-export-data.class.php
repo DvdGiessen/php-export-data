@@ -187,7 +187,11 @@ class ExportDataExcel extends ExportData {
 		
 		return $output;
 	}
-	
+  function newSheet($name)
+  {
+    $this->write("    </Table>\n</Worksheet>\n");
+    $this->write(sprintf("<Worksheet ss:Name=\"%s\">\n    <Table>\n", htmlentities($name)));
+  }
 	function generateRow($row) {
 		$output = '';
 		$output .= "        <Row>\n";
