@@ -100,6 +100,30 @@ class TestOfPedExportDataExcel extends UnitTestCase {
     $this->assertEqual('Test sheet 3', $sheets->item(2)->attributes->item(0)->nodeValue);
   }
 
+  function test_Ped_String_WritesInEachWorksheet()
+  {
+    $excel = new ExportDataExcel('string');
+    $excel->title = 'Test sheet 1';
+    $excel->initialize();
+    $excel->addRow(array('data 1'));
+    $excel->newSheet('Test sheet 2');
+    $excel->addRow(array('data 2'));
+    $excel->newSheet('Test sheet 3');
+    $excel->addRow(array('data 3'));
+    $excel->finalize();
+    $xml = $excel->getString();
+    $dom = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $dom->loadXML($xml);
+    $sheets = $dom->getElementsByTagName('Worksheet');
+    $this->assertEqual('data 1', trim($sheets->item(0)->nodeValue));
+    $this->assertEqual('data 2', trim($sheets->item(1)->nodeValue));
+    $this->assertEqual('data 3', trim($sheets->item(2)->nodeValue));
+    // Check 'data 3' does NOT appear in the other sheets
+    $this->assertNotEqual('data 3', trim($sheets->item(0)->nodeValue));
+    $this->assertNotEqual('data 3', trim($sheets->item(1)->nodeValue));
+  }
+
   private function check_libxml_errors()
   {
     $errors = libxml_get_errors();
