@@ -9,7 +9,7 @@
 require '../../simpletest/autorun.php';
 require '../php-export-data.class.php';
 
-class TestOfPedExcel extends UnitTestCase {
+class TestOfPedExportDataExcel extends UnitTestCase {
 
   function test_Ped_File_CreatesFile()
   {
