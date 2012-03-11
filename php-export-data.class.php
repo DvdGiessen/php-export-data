@@ -205,7 +205,7 @@ class ExportDataExcel extends ExportData {
 		$output = '';
 		$style = '';
 		
-		if(preg_match("/^[0-9]{1,11}$/",$item)) {
+		if(preg_match("/^\d+(\.\d*)?$/",$item)) {
 			$type = 'Number';
 		}
 		// sniff for valid dates should start with something like 2010-07-14 or 7/14/2010 etc..
