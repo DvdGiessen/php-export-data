@@ -222,6 +222,7 @@ class ExportDataExcel extends ExportData {
 		}
 				
 		$item = str_replace('&#039;', '&apos;', htmlspecialchars($item, ENT_QUOTES));
+		$item = str_replace("\n", '&#10;', $item);
 		$output .= "            ";
 		$output .= $style ? "<Cell ss:StyleID=\"$style\">" : "<Cell>";
 		$output .= sprintf("<Data ss:Type=\"%s\">%s</Data>", $type, $item);
