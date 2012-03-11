@@ -151,10 +151,7 @@ class ExportDataCSV extends ExportData {
  *  by Oliver Schwarz
  */
 class ExportDataExcel extends ExportData {
-	
-	const XmlHeader = "<?xml version=\"1.0\" encoding=\"%s\"?\>\n<Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:html=\"http://www.w3.org/TR/REC-html40\">";
-	const XmlFooter = "</Workbook>";
-	
+
 	public $encoding = 'UTF-8'; // encoding type to specify in file. 
 	// Note that you're on your own for making sure your data is actually encoded to this encoding
 	
@@ -162,8 +159,10 @@ class ExportDataExcel extends ExportData {
 	
 	function generateHeader() {
 		
-		// workbook header
-		$output = stripslashes(sprintf(self::XmlHeader, $this->encoding)) . "\n";
+		// Workbook header
+		$output = '<?xml version="1.0" encoding="%s"?>' . "\n";
+		$output.= '<?mso-application progid=\"Excel.Sheet\"?>' . "\n"; // Get the .xml file to open in Excel as a default
+		$output.= '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40">' . "\n";
 		
 		// Set up styles
 		$output .= "<Styles>\n";
@@ -183,7 +182,7 @@ class ExportDataExcel extends ExportData {
 		$output .= "    </Table>\n</Worksheet>\n";
 		
 		// workbook footer
-		$output .= self::XmlFooter;
+		$output .= '</Workbook>';
 		
 		return $output;
 	}
