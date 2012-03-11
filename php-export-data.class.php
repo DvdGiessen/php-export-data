@@ -160,8 +160,8 @@ class ExportDataExcel extends ExportData {
 	function generateHeader() {
 		
 		// Workbook header
-		$output = '<?xml version="1.0" encoding="%s"?>' . "\n";
-		$output.= '<?mso-application progid=\"Excel.Sheet\"?>' . "\n"; // Get the .xml file to open in Excel as a default
+    $output = '<?xml version="1.0" encoding="' . $this->encoding . '"?>' . "\n";
+    $output.= '<?mso-application progid="Excel.Sheet"?>' . "\n"; // Get the .xml file to open in Excel as a default
 		$output.= '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40">' . "\n";
 		
 		// Set up styles
