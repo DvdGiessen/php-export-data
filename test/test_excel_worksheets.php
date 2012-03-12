@@ -34,16 +34,6 @@ class TestOfPedExportDataExcel extends UnitTestCase {
     $dom->loadXML($xml);
     $dom->schemaValidate('SpreadsheetML/excelss.xsd');
     $this->assertTrue($this->check_libxml_errors());
-    $simple = simplexml_load_string($xml);
-    $sheets = $dom->getElementsByTagName('Worksheet');
-    foreach ($sheets as $sheet) {
-      if ($sheet->hasAttributes()) {
-        foreach($sheet->attributes as $attr) {
-          print $attr->nodeName;
-//          print $attr->nodeValue;
-        }
-      }
-    }
   }
 
   function test_Ped_String_CreatesOneWorksheet()
@@ -57,14 +47,6 @@ class TestOfPedExportDataExcel extends UnitTestCase {
     $dom->loadXML($xml);
     $sheets = $dom->getElementsByTagName('Worksheet');
     $this->assertEqual(1, $sheets->length);
-    foreach ($sheets as $sheet) {
-      if ($sheet->hasAttributes()) {
-        foreach($sheet->attributes as $attr) {
-          print $attr->nodeName;
-//          print $attr->nodeValue;
-        }
-      }
-    }
   }
 
   function test_Ped_String_CreatesMultipleWorksheets()
@@ -122,6 +104,24 @@ class TestOfPedExportDataExcel extends UnitTestCase {
     // Check 'data 3' does NOT appear in the other sheets
     $this->assertNotEqual('data 3', trim($sheets->item(0)->nodeValue));
     $this->assertNotEqual('data 3', trim($sheets->item(1)->nodeValue));
+  }
+
+  function test_Ped_String_SetsMultilineStyle()
+  {
+    $excel = new ExportDataExcel('string');
+    $excel->initialize();
+    $excel->addRow(array("line 1\nline 2"));
+    $excel->finalize();
+    $xml = $excel->getString();
+    $dom = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $dom->loadXML($xml);
+    $cells = $dom->getElementsByTagName('Cell');
+    $this->assertTrue($cells->item(0)->hasAttributes());
+    $this->assertEqual('ss:StyleID', $cells->item(0)->attributes->item(0)->nodeName);
+    $this->assertEqual('sMultiLine', $cells->item(0)->attributes->item(0)->nodeValue);
+    $data = $dom->getElementsByTagName('Data');
+    $this->assertEqual("line 1\nline 2", trim($cells->item(0)->nodeValue));
   }
 
   private function check_libxml_errors()
