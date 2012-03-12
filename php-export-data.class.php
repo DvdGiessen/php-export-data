@@ -165,9 +165,10 @@ class ExportDataExcel extends ExportData {
 		$output.= '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40">' . "\n";
 		
 		// Set up styles
-		$output .= "<Styles>\n";
-		$output .= "<Style ss:ID=\"sDT\"><NumberFormat ss:Format=\"Short Date\"/></Style>\n";
-		$output .= "</Styles>\n";
+		$output .= '<Styles>' . "\n";
+		$output .= '  <Style ss:ID="sDT"><NumberFormat ss:Format="Short Date"/></Style>' . "\n";
+		$output .= '  <Style ss:ID="sMultiLine"><Alignment ss:Vertical="Bottom" ss:WrapText="1"/></Style>' . "\n";
+		$output .= '</Styles>' . "\n";
 		
 		// worksheet header
 		$output .= sprintf("<Worksheet ss:Name=\"%s\">\n    <Table>\n", htmlentities($this->title));
@@ -219,6 +220,9 @@ class ExportDataExcel extends ExportData {
 		}
 		else {
 			$type = 'String';
+			if (strpos($item, "\n") !== false) {
+			  $style = 'sMultiLine';
+			}
 		}
 				
 		$item = str_replace('&#039;', '&apos;', htmlspecialchars($item, ENT_QUOTES));
