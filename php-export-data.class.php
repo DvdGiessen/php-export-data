@@ -202,11 +202,14 @@ class ExportDataExcel extends ExportData {
 		$output = '';
 		$style = '';
 		
-		if(is_numeric($item)) {
+		// allow only numbers in format "2", "2.5", "2,5" and convert comma to dot
+		if(preg_match('#^\d+([.,]\d+)?$#', $item)) {
+			$item = str_replace(',', '.', $item);
 			$type = 'Number';
 		}
-		// sniff for valid dates should start with something like 2010-07-14 or 7/14/2010 etc..
-		elseif(preg_match("/^(\d{2}|\d{4})[\/\\\-]\d{1,2}[\/\\\-](\d{2}|\d{4})([^d].+)?$/", $item) && $timestamp = strtotime($item)) {
+		// date should match iso format: https://en.wikipedia.org/wiki/ISO_8601 or US format
+		// milliseconds are removed
+		elseif(preg_match('#^(?:\d{1,2}|\d{4})[/-]\d{1,2}[/-](?:\d{1,2}|\d{4})(?:[T\s]+(?:[\d:]+(?:,\d+)?))?$#', $item) && $timestamp = strtotime(preg_replace('#(,\d{3})$#', '', $item))) {
 			$type = 'DateTime';
 			$item = strftime("%Y-%m-%dT%H:%M:%S",$timestamp);
 			$style = 'sDT'; // defined in header; tells excel to format date for display
