@@ -7,6 +7,8 @@ $excel->filename = "test.xml";
 
 $data = array(
 	array(1,2,3),
+	array(0.1, 2.15),
+	array('0,1', '2,15', '.5', '2.', '1,2,3'),
 	array("asdf","jkl","semi"), 
 	array("1273623874628374634876","=asdf","10-10"),
 	array("2010-01-02 10:00AM","1/1/11","10-10"),
